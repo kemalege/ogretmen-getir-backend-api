@@ -4,7 +4,10 @@ const routes = require("./routes");
 const connectDatabase = require("./helpers/database/connectDatabase");
 const customErrorHandler = require("./middlewares/errors/customErrorHandler");
 const cors = require("cors")
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const corsOptions = require("./config/corsOptions");
+const bodyParser = require('body-parser');
+
 
 dotenv.config({});
 
@@ -12,9 +15,13 @@ connectDatabase();
 
 const app = express();
 
-app.use(cors({
-  origin: '*'
-}));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
+// app.use(cors({
+//   origin: '*'
+// }));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 

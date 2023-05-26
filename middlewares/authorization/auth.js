@@ -90,6 +90,16 @@ const getAccessToRoute = (req, res, next) => {
     next();
   });
 
+  const getProfileOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
+
+    const user = await User.findById(req.user.id);
+  
+    if (course.instructor != userId ) {
+      return next(new CustomError("Only owner can handle this operation", 403));
+    }
+    next();
+  });
+
   const selfAssesmentCheck = asyncErrorWrapper(async (req, res, next) => {
     
     if (req.user.id == req.params.id) {
@@ -99,4 +109,4 @@ const getAccessToRoute = (req, res, next) => {
   });
 
 
-  module.exports = {getAccessToRoute, getAdminAcess, getCommentOwnerAccess, getInstructorAccess, getCourseOwnerAccess, getStudentAccess, selfAssesmentCheck}
+  module.exports = {getAccessToRoute, getAdminAcess, getCommentOwnerAccess, getInstructorAccess, getCourseOwnerAccess, getStudentAccess, selfAssesmentCheck, getProfileOwnerAccess}

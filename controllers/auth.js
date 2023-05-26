@@ -19,12 +19,11 @@ const register = asyncErrorWrapper(async (req, res, next) => {
 });
 
 const getUser = asyncErrorWrapper(async (req, res, next) => {
+  const user = await User.findById(req.user.id)
+
   return res.status(200).json({
     success: true,
-    data: {
-      id: req.user.id,
-      name: req.user.name,
-    },
+    data: user  
   });
 });
 
@@ -37,6 +36,10 @@ const login = asyncErrorWrapper(async (req, res, next) => {
 
   const user = await User.findOne({ email }).select("+password");
 
+  if(!user) {
+    return next(new CustomError("Invalid email address or password", 400));
+  }
+
   if (!comparePassword(password, user.password)) {
     return next(new CustomError("Please Check your credentials", 400));
   }
@@ -46,7 +49,7 @@ const login = asyncErrorWrapper(async (req, res, next) => {
 
 const logout = asyncErrorWrapper(async (req, res, next) => {
   const { NODE_ENV } = process.env;
-
+  
   res
     .status(200)
     .cookie({
@@ -161,7 +164,9 @@ const createPhoto = asyncErrorWrapper(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Image Upload Succesfull",
-    data: user,
+    data: {
+      profile_image : user.profile_image.url
+    }
   });
 });
 

@@ -12,8 +12,8 @@ const uploadPhoto = asyncErrorWrapper(async (req, res, next) => {
 
   const result = await cloudinary.uploader.upload(profile_image, {
     folder: "ogretmen_getir",
-    width: 300,
-    crop: "scale",
+    // width: 300,
+    //crop: "scale",
   });
   req.data = result;
 

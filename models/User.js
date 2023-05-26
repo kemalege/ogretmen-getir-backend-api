@@ -8,12 +8,12 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: [true, "please provide a name"],
+    // required: [true, "please provide a name"],
   },
-  // surname: {
-  //   type: String,
-  //   required: [true, "please provide a surname"],
-  // },
+  surname: {
+    type: String,
+    // required: [true, "please provide a surname"],
+  },
   email: {
     type: String,
     required: [true, "Please provide a email address"],
@@ -32,6 +32,15 @@ const UserSchema = new Schema({
     minlength: [6, "Please provide a password with at least 6 characters"],
     required: [true, "Please provide a password"],
     select: false,
+  },
+  gender: {
+    type: String,
+  },
+  department: {
+    type: String,
+  },
+  dateOfBirth: {
+    type: Date
   },
   createdAt: {
     type: Date,
@@ -59,6 +68,12 @@ const UserSchema = new Schema({
       // required: true
     },
   },
+  courses: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Course",
+    },
+  ],
   ratings: [
     {
       user: {
