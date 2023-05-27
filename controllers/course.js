@@ -27,6 +27,26 @@ const getAllCourses = asyncErrorWrapper(async (req, res, next) => {
   res.status(200).json(res.queryResults);
 });
 
+const getOwnerCourses = asyncErrorWrapper(async (req, res, next) => {
+  const courses = await Course.find({ instructor: { _id: req.user.id } });
+
+  res.status(200).json({
+    success: true,
+    data: courses,
+  });
+});
+
+const getEnrolledCourses = asyncErrorWrapper(async (req, res, next) => {
+  const studentId = req.user.id
+  const courses = await Course.find({ students: { $in: [studentId] } })
+ 
+  res.status(200).json({
+    success: true,
+    data: courses,
+  });
+});
+
+
 const editCourse = asyncErrorWrapper(async (req, res, next) => {
   const { id } = req.params;
   const course_info = req.body;
@@ -108,7 +128,7 @@ const getCourseById = asyncErrorWrapper(async (req, res, next) => {
   const { id } = req.params;
   const course = await Course.findById(id).populate({
     path: "instructor",
-    select: "name profile_img",
+    select: "name profile_image",
   });
   if (!course) {
     return next(new CustomError("Course Not Found", 400));
@@ -130,4 +150,6 @@ module.exports = {
   deleteCourse,
   getAllCourses,
   getCourseById,
+  getOwnerCourses,
+  getEnrolledCourses
 };

@@ -10,8 +10,15 @@ const courseQueryMiddleware = function (model, options) {
   return asyncErrorWrapper(async function (req, res, next) {
     
     let query = model.find();
-
-    query = searchHelper("class", query, req);
+    
+    if(Object.keys(req.query)=="search"){
+      query = searchHelper("class", query, req);
+      
+    }
+    if(Object.keys(req.query)=="instructor"){
+      query = searchHelper("name", query, req);
+      
+    }
 
     if (options && options.population) {
       query = populateHelper(query, options.population);

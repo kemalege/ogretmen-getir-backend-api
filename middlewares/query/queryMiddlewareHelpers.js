@@ -1,8 +1,9 @@
 const searchHelper = (searchKey, query, req) => {
-
-  if (req.query.search) {
+  console.log()
+  if (Object.values(req.query)) {
+    
     const searchObject = {};
-    const regex = new RegExp(req.query.search, "i");
+    const regex = new RegExp(Object.values(req.query), "i");
 
     searchObject[searchKey] = regex;
 
